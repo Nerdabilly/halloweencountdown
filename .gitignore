@@ -1,0 +1,12 @@
+bmp
+wpa_supplicant.conf
+gifs
+images
+main
+notes.txt
+countdown
+countdown.pub
+raw gifs
+tmp_numbers*
+.DS_Store
+generate2.sh
