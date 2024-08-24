@@ -1,5 +1,5 @@
 pointsize=14
-for index in $(seq 0 365) 
+for index in $(seq 0 366) 
 do
 	if [ $index -lt 10 ]; then
 		pointsize=18
@@ -21,10 +21,10 @@ do
 		echo "frame: $frame"
 		echo "pointsize: $pointsize $index-$frame $((10 + $frame)) size change: $(($pointsize + $(($pt+3))))"    
 		
-		magick -size 32x32 xc:black -font Trade-Winds -pointsize $(($pointsize + $(($pt)))) -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" tmp_numbers3/$index-$frame.gif 
+		magick -size 32x32 xc:black -font Trade-Winds -pointsize $(($pointsize + $(($pt)))) -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" tmp_numbers/$index-$frame.gif 
 
 	done 
 	
-	magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers3/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers3/$index.gif
+	magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers_output/$index.gif
 
 done

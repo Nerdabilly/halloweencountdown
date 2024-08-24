@@ -4,13 +4,15 @@ For the past couple years, I've had a "Countdown to Halloween" sign posted outsi
 
 This project is the code, materials list, and assembly tutorial. It was in progress and well underway when I learned that Adafruit has a [project and purpose-built kit](https://learn.adafruit.com/halloween-countdown-display-matrix) for exactly this, but I didn't want to stop, and why not offer a different option with some more customization?
 
-The specific setup here is using the materials I used, which was a 32x32 LED matrix and a Pi Zero W/Matrix Bonnet combination. Other hardware combinations such as a larger or different aspect ratio matrix or the HAT should also work, but you would have to modify the LED software installation and most likely rebuild the animations and numbers to accomodate those changes. I can't offer support for any of those variations, but they should work as long as you build for what you have.
+The specific setup here is using the materials I used, which was a 32x32 LED matrix and a Pi Zero W with the Matrix Bonnet. Other hardware combinations such as a larger or different aspect ratio matrix or the HAT should also work, but you would have to modify the LED software installation and most likely rebuild the animations and numbers to accomodate those changes. I can't offer support for any of those variations, but they should work as long as you build for what you have.
 
 ## Prerequisites
 
-You should have some familiarity with setting up and configuring a headless Raspberry Pi, including adding hardware and flashing/installing the operating system. 
+You should have some familiarity with setting up and configuring a headless Raspberry Pi, including adding hardware and flashing/installing the operating system, and running the Pi terminal over SSH. The projects listed on the Matrix and HAT/Bonnet links below should include everything you need to know to get started with setting up the hardware.
 
 You should also be familiar with pulling Python code libraries from Git onto your Pi (you're here, so you probably know what you're doing with that...)
+
+Another note - I am a pretty experienced developer with a variety of technologies, but this was actually my first foray into writing anything with Python. I went with Python because that's what the existing Matrix and GIF libraries were written in. This code is simple and it works, but that doesn't mean it's necessarily the best or "most Pythonic" way to do things. If you notice anything, or have any improvements or suggestions, reach out or create an MR. 
 
 ## Materials
 
@@ -23,13 +25,14 @@ You should also be familiar with pulling Python code libraries from Git onto you
 - [GPIO ribbon cable](https://www.adafruit.com/product/4170) for connecting the matrix 
 - Any additional components or headers for attaching the LED hardware to the Pi (I used a solderless header kit, your specific needs may vary)
 
+
 That's all you need to get started. I'm including optional stuff below for how I weatherproofed and diffused it, but that's not necessary to simply build the project.
 
 ## Getting Started
 
 First, assemble the Pi and Matrix hardware according to the instructions for what you're using. This will vary depending on what Pi and matrix hardware you have, so I'm leaving out the specifics, but the information should be easy to find from Adafruit product pages for the hardware you have.
 
-The [rpi-rgb-led-matrix repo](https://github.com/hzeller/rpi-rgb-led-matrix) goes into some more detail about the best choices for OS and other considerations, so there is a good place to start. Install this library onto your Pi. That should be all you need to get started.
+The [rpi-rgb-led-matrix repo](https://github.com/hzeller/rpi-rgb-led-matrix) goes into some more detail about the best choices for OS and other considerations, so that's a good place to start. Install this library onto your Pi. That should be all you need to get started.
 
 ## The Code
 
@@ -58,7 +61,7 @@ This entire project is simply cycling a series of animated GIFs onto the matrix.
 
 The animations in the `animations` folder were found from various sources around the Web and in some cases, optimized to display on the 32x32 Matrix. I did not create them, though they were all available from free, non-attribution and CC0-licensed sources.
 
-If you'd like to create your own or edit and optimize an existing GIF, you can use almost any graphics software (Photoshop, GIMP, etc) to create them, but remember that the matrix is actually very low resolution so you need to be careful with shadows, antialiasing, and too much color depth or variation. I found that [Piskel](https://www.piskelapp.com/) worked best for this, since it specializes in creating low-res "sprite style" GIF animations, which is exactly what this project needs.
+If you'd like to create your own or edit and optimize an existing GIF, you can use almost any graphics software (Photoshop, GIMP, etc) to create them, but remember that the matrix is actually very low resolution at only 32px x 32px, so you need to be careful with shadows, antialiasing, and too much color depth or variation. I found that [Piskel](https://www.piskelapp.com/) worked best for this, since it specializes in creating low-res "sprite style" GIF animations, which is exactly what this project needs.
 
 ## Running as a Service
 
@@ -75,4 +78,72 @@ If you ever need to start/stop it for any reason, simply use `systemctl`:
 
 ## OPTIONAL: Making Your Own Numbers
 
+_(There should be no need to go through these next steps unless you want to generate your own images using different fonts or colors than the included options.)_
+
+All of the numbers in the countdown, from 0 to 365, were generated using ImageMagick and a shell script (`generate.sh`, included here) to create them. 
+
+ImageMagick is a very robust, powerful and complicated software, so I'm not going to go into detail on how to use it, other than to explain what the specific calls to it are doing and some tips I learned along the way.
+
+Generating a series of 366 animated images in a loop can be time-consuming, so the better your computer and graphics card is, the faster this will go. 
+
+**Important!** Perform these steps _on your computer_, not on the Pi you will be running this project on, then transfer the images to the Pi memory when you're done. 
+
+To get started:
+
+1. Install [ImageMagick](https://imagemagick.org/)
+1. Create a new directory and move `generate.sh` into it 
+1. Create 2 new subfolders:
+- `tmp_numbers`
+- `numbers_output`
+
+Here is where things get tricky, and I can only offer generic advice because it will all vary based on what font you are using, what size matrix you are using, and how big you want the numbers. 
+
+Modify Line 24 of `generate.sh` to use the font and color/gradient you want on the text. 
+
+`magick -size 32x32 xc:black **-font Trade-Winds** -pointsize $(($pointsize + $(($pt)))) -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" tmp_numbers/$index-$frame.gif`
+
+Note that calls to ImageMagick use the system font name, which may not be what displays in your Font Book/Font Explorer when you preview a font. On Mac OS, you can see these by running `identify -list font` in the Terminal. 
+
+This will generate 3 frames of animation and place them into the `tmp_numbers` subfolder. 
+
+The final animation is generated on Line 28 of `generate.sh`:
+
+`	magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers_output/$index.gif`
+
+Again, you may have to play with these values to get the final result you want. 
+
+One helpful tip - if you just want to see one image, edit Line 2 and change:
+
+`for index in $(seq 0 366) `  
+to  
+`for index in $(seq 0 1)`  
+
+This will generate only one number animation and run a lot more quickly so you can preview your work. 
+
+Another option for previewing is to use only the first ImageMagick command to generate a preview at the Terminal:
+
+`magick -size 32x32 xc:black **-font Trade-Winds** -pointsize 15 -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" preview.gif`
+
+Once this is done, you can preview the image by just opening it on your desktop (which doesn't always give a good idea of how it will look on the matrix), or copy to the Pi filesystem and use the `display_gif` command (see above) to preview it on the Matrix. 
+
+After you have completed creating the custom numbers, simply copy all of them over the Pi in their own folder and set the `NUMBERS` variable to that folder. You can use `scp` for this, but I found `sshfs` to be faster and easier. 
+
 ## OPTIONAL: Weatherproofing
+
+Since my matrix was going to spend 2 months outdoors in increasingly-bad fall weather, I wanted an option for weatherproofing it. After looking into a lot of different possibilities, here is what I can up with. As always, this isn't strictly necessary, especially if your matrix won't be outdoors, and you are welcome to use your own weatherproofing solutions depending on your needs, but I am documenting what I did here for posterity. 
+
+Materials:
+
+- a weatherproof box with a clear cover (I really like [this one from Hawk USA](https://www.hawkusa.com/manufacturers/bud/enclosures/nbf-32414) - it was almost the perfect size for my LED matrix)
+- a PG7 [Cable Gland](https://a.co/d/cBcMhjm)
+- 4-pin [Low Voltage Wire](https://a.co/d/cBcMhjm)
+- [Micro USB Pigtail](https://a.co/d/j2tZsGF) - Originally I did this with Screw Terminal connections, but they were too unreliable
+- [Barrel Connector Pigtails](https://a.co/d/0jiUitL) - One Female, One Male
+- a [SockitBox](https://a.co/d/1cQADuA) for the Pi and Matrix power sources
+
+## OPTIONAL: Diffusing with Diffusion Acrylic 
+
+You can use [Black Diffusion Acrylic](https://www.adafruit.com/product/4594) to diffuse the LED lights on the Matrix. 
+
+This isn't strictly necessary although it does help make the image a little cleaner-looking and less eye-hurty. I cut it down to size with a table saw and [this saw blade](https://a.co/d/cDQalF4).
+
