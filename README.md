@@ -108,7 +108,7 @@ This will generate 3 frames of animation and place them into the `tmp_numbers` s
 
 The final animation is generated on Line 28 of `generate.sh`:
 
-`	magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers_output/$index.gif`
+`magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers_output/$index.gif`
 
 Again, you may have to play with these values to get the final result you want. 
 
@@ -139,7 +139,29 @@ Materials:
 - 4-pin [Low Voltage Wire](https://a.co/d/cBcMhjm)
 - [Micro USB Pigtail](https://a.co/d/j2tZsGF) - Originally I did this with Screw Terminal connections, but they were too unreliable
 - [Barrel Connector Pigtails](https://a.co/d/0jiUitL) - One Female, One Male
+- [Solder Seal Wire Connectors](https://a.co/d/2ccD6YX)
 - a [SockitBox](https://a.co/d/1cQADuA) for the Pi and Matrix power sources
+- USB Type A Male [Screw Terminal](https://a.co/d/daM8h27) or [Pigtail](https://a.co/d/daM8h27) 
+
+Drill a hole in the bottom of the enclosure and install the cable gland and low voltage wire (Make sure you have a plan for how/where it's getting installed and drill the hole/run the wire accordingly! You don't want the wire lead getting in the way of installation):
+
+![image](https://github.com/user-attachments/assets/b94bae4f-21f1-4f86-9a5d-ee72708ce3bf)
+
+Using the Solder Seal connectors, connect the Micro USB pigtail and the Male Barrel connector pigtail to the pins inside the wire. (you will have do the normal red/black on one and use white/yellow for the other. Doesn't really matter as long as your polarity is correct and you make sure the other end is connected the same way.) 
+![image](https://github.com/user-attachments/assets/a6ba113c-10fa-4eb8-9282-a2c9a8baa2a1)
+
+Do the same at the other end with the female Barrel Connector and the USB A Male Connector (again, watch your Polarity! you will need to use white/yellow to connect red/black on one of them. Just keep track of what's going where. I used yellow to connect to red and white to connect to black on the matrix power cord)
+![image](https://github.com/user-attachments/assets/35ffbfb3-7dbe-4a4f-89b1-24303c23c3e8)
+
+The Pi and Matrix will stay inside the enclosure. The Matrix is held in place up against the screen using a bracked that I 3D printed (included in the repo in the `stl` folder):
+
+![image](https://github.com/user-attachments/assets/57f5782c-a978-4c1f-a636-c421ec7c3435)
+
+
+
+Store the USB power supply for the Pi and the Matrix inside the SockitBox. 
+
+Run an outdoor extension cord into the SockitBox and run the 4-pin wire out of the SockitBox to connect the Matrix enclosure.
 
 ## OPTIONAL: Diffusing with Diffusion Acrylic 
 
