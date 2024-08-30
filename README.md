@@ -12,6 +12,8 @@ You should have some familiarity with setting up and configuring a headless Rasp
 
 You should also be familiar with pulling Python code libraries from Git onto your Pi (you're here, so you probably know what you're doing with that...)
 
+**Important!** Most versions (maybe all?) of Raspberry Pi do not have an internal clock module. They rely on their Wifi connection to reach out to a date/time server to determine the correct date. This project will give you an inaccurate countdown if it does not have a reliable Wifi connection. There are addon clock modules for Raspberry Pi available, but I haven't used one and didn't create this project with that in mind. So make sure there's a decent wifi connection where you install this. 
+
 Another note - I am a pretty experienced developer with a variety of technologies, but this was actually my first foray into writing anything with Python. I went with Python because that's what the existing Matrix and GIF libraries were written in. This code is simple and it works, but that doesn't mean it's necessarily the best or "most Pythonic" way to do things. If you notice anything, or have any improvements or suggestions, reach out or create an MR. 
 
 ## Materials
@@ -24,7 +26,7 @@ Another note - I am a pretty experienced developer with a variety of technologie
 - Power supplies for the Pi and [Matrix](https://www.adafruit.com/product/1466)
 - [GPIO ribbon cable](https://www.adafruit.com/product/4170) for connecting the matrix 
 - Any additional components or headers for attaching the LED hardware to the Pi (I used a solderless header kit, your specific needs may vary)
-
+- Reliable Wifi
 
 That's all you need to get started. I'm including optional stuff below for how I weatherproofed and diffused it, but that's not necessary to simply build the project.
 
@@ -143,14 +145,14 @@ Materials:
 - a [SockitBox](https://a.co/d/1cQADuA) for the Pi and Matrix power sources
 - USB Type A Male [Screw Terminal](https://a.co/d/daM8h27) or [Pigtail](https://a.co/d/daM8h27) 
 
-Drill a hole in the bottom of the enclosure and install the cable gland and low voltage wire (Make sure you have a plan for how/where it's getting installed and drill the hole/run the wire accordingly! You don't want the wire lead getting in the way of installation):
+Drill a hole in the bottom of the enclosure and install the cable gland and low voltage wire (Make sure you have a plan for how/where it's getting installed and drill the hole/run the wire accordingly! You don't want the wire lead getting in the way of installation. The clear lid of the box is facing forward so you can see the matrix, which means the "bottom" where I made the cord hole is actually the side.):
 
 ![image](https://github.com/user-attachments/assets/b94bae4f-21f1-4f86-9a5d-ee72708ce3bf)
 
 Using the Solder Seal connectors, connect the Micro USB pigtail and the Male Barrel connector pigtail to the pins inside the wire. (you will have do the normal red/black on one and use white/yellow for the other. Doesn't really matter as long as your polarity is correct and you make sure the other end is connected the same way.) 
 ![image](https://github.com/user-attachments/assets/a6ba113c-10fa-4eb8-9282-a2c9a8baa2a1)
 
-Do the same at the other end with the female Barrel Connector and the USB A Male Connector (again, watch your Polarity! you will need to use white/yellow to connect red/black on one of them. Just keep track of what's going where. I used yellow to connect to red and white to connect to black on the matrix power cord)
+Do the same at the other end with the female Barrel Connector and the USB A Male Connector (again, watch your polarity! you will need to use white/yellow to connect red/black on one of them. Just keep track of what's going where. I used yellow to connect to red and white to connect to black on the matrix power cord)
 ![image](https://github.com/user-attachments/assets/35ffbfb3-7dbe-4a4f-89b1-24303c23c3e8)
 
 The Pi and Matrix will stay inside the enclosure. The Matrix is held in place up against the screen using a bracked that I 3D printed (included in the repo in the `stl` folder):
@@ -159,7 +161,7 @@ The Pi and Matrix will stay inside the enclosure. The Matrix is held in place up
 
 
 
-Store the USB power supply for the Pi and the Matrix inside the SockitBox. 
+Store the power supplies for the Pi and the Matrix inside the SockitBox. 
 
 Run an outdoor extension cord into the SockitBox and run the 4-pin wire out of the SockitBox to connect the Matrix enclosure.
 
@@ -169,3 +171,12 @@ You can use [Black Diffusion Acrylic](https://www.adafruit.com/product/4594) to 
 
 This isn't strictly necessary although it does help make the image a little cleaner-looking and less eye-hurty. I cut it down to size with a table saw and [this saw blade](https://a.co/d/cDQalF4).
 
+## TODO / Possible Future Enhancements
+
+While this project is complete and works as-is, here are a few features I am considering for the future:
+
+- Adding a clock module to remove the need for a WiFi connection to determine the date
+- Generating more number styles
+- "Plugins" or other styles for Christmas, other holidays, etc
+- Rotating between countdown number styles so there's more variety in the display for the same number
+- additional weatherproofing/outdoor display options
