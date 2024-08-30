@@ -132,7 +132,7 @@ After you have completed creating the custom numbers, simply copy all of them ov
 
 ## OPTIONAL: Weatherproofing
 
-Since my matrix was going to spend 2 months outdoors in increasingly-bad fall weather, I wanted an option for weatherproofing it. After looking into a lot of different possibilities, here is what I can up with. As always, this isn't strictly necessary, especially if your matrix won't be outdoors, and you are welcome to use your own weatherproofing solutions depending on your needs, but I am documenting what I did here for posterity. 
+Since my matrix was going to spend 2 months outdoors in increasingly-bad fall weather, I wanted an option for weatherproofing it. After looking into a lot of different possibilities, here is what I came up with. As always, this isn't strictly necessary, especially if your matrix won't be outdoors, and you are welcome to use your own weatherproofing solutions depending on your needs. 
 
 Materials:
 
