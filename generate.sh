@@ -19,10 +19,11 @@ do
 			pt=$((frame+1))
 		fi
 		echo "frame: $frame"
-		echo "pointsize: $pointsize $index-$frame $((10 + $frame)) size change: $(($pointsize + $(($pt+3))))"    
+		echo "pointsize: $pointsize $index-$frame $((10 + $frame)) size change: $(($pointsize + $(($pt))))"    
 		
-		magick -size 32x32 xc:black -font Trade-Winds -pointsize $(($pointsize + $(($pt)))) -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" tmp_numbers/$index-$frame.gif 
+		magick -size 32x32 xc:black -font Creeper -pointsize $(($pointsize + $(($pt)))) -fill gradient:#ff0000-#A57C7C -gravity center -draw "text 0,0 '$index'" tmp_numbers/$index-$frame.gif 
 
+		
 	done 
 	
 	magick -size 32x32  -dispose previous -delay 17  -loop 0 tmp_numbers/$index-%d.gif[0-4] -duplicate 1,-2-1   numbers_output/$index.gif
