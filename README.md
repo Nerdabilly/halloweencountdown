@@ -1,5 +1,8 @@
 # Raspberry Pi Animated LED Matrix Halloween Countdown 
 
+
+![newcountdown](https://github.com/user-attachments/assets/32bf50af-8b74-4c1c-8f01-725c6b543c95)
+
 For the past couple years, I've had a "Countdown to Halloween" sign posted outside my house from the start of September until the day after Halloween. The original design was manual, which required me to go outside and flip the numbers every day. This could get difficult, since sometimes I'd forget and I'd often be fixing or adjusting it if the weather blew the numbers around. I'd always considered it a small and minor part of the display, but I was surprised to learn that my neighbors loved it, so I started coming up with a way to automate the process (and do it with some style).
 
 This project is the code, materials list, and assembly tutorial. It was in progress and well underway when I learned that Adafruit has a [project and purpose-built kit](https://learn.adafruit.com/halloween-countdown-display-matrix) for exactly this, but I didn't want to stop, and why not offer a different option with some more customization?
