@@ -160,9 +160,10 @@ Do the same at the other end with the female Barrel Connector and the USB A Male
 
 The Pi and Matrix will stay inside the enclosure. The Matrix is held in place up against the screen using a bracked that I 3D printed (included in the repo in the `stl` folder):
 
-Store the power supplies for the Pi and the Matrix inside the SockitBox. 
 
-Run an outdoor extension cord into the SockitBox and run the 4-pin wire out of the SockitBox to connect the Matrix enclosure.
+![PXL_20240831_224122825](https://github.com/user-attachments/assets/1cd29963-74aa-4307-9f49-83b50bf10875)
+
+Store the power supplies for the Pi and the Matrix inside the SockitBox. Run an outdoor extension cord into the SockitBox and run the 4-pin wire out of the SockitBox to connect the Matrix enclosure.
 
 
 ## OPTIONAL: Diffusing with Diffusion Acrylic 
