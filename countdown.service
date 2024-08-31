@@ -1,0 +1,14 @@
+[Unit]
+Description=Countdown
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/python3 /home/YOUR_USERNAME/PATH/TO/PROJECT/main.py
+
+[Install]
+WantedBy=multi-user.target

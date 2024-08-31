@@ -28,6 +28,7 @@ Another note - I am a pretty experienced developer with a variety of technologie
 - Any additional components or headers for attaching the LED hardware to the Pi (I used a solderless header kit, your specific needs may vary)
 - Reliable Wifi
 
+
 That's all you need to get started. I'm including optional stuff below for how I weatherproofed and diffused it, but that's not necessary to simply build the project.
 
 ## Getting Started
@@ -53,17 +54,17 @@ There are 3 variables at the top of `main.py` that can be adjusted to tweak the 
 `SECONDS_TO_DISPLAY_NUMBER`: How long to show the number of days until Halloween on the matrix, in seconds  
 `SECONDS_TO_DISPLAY_IMAGE`: How long to show an animation on the matrix in between showing numbers, in seconds
 
-`NUMBERS`: the folder containing the series of animated GIF numbers to display. There are 4 included styles here, in folders `numbers`, `numbers2`, `numbers3`, and `numbers4`. Simply set this variable to the folder containing the style you want. 
+`NUMBERS`: the folder containing the series of animated GIF numbers to display. There are 4 included styles here, in folders called `numbers_red`, `numbers_green`, `numbers_orange`, and `numbers_flame`. Set this variable to the name of the folder containing the style you want. You can also create your own style. 
 
 You could use `display_gif.py` to preview each style on the matrix, but I find it easier to just open the GIF on your desktop. If you'd like to make your own numbers instead, I've included some tips for that below.
 
 ## The Images
 
-This entire project is simply cycling a series of animated GIFs onto the matrix. Everything you see on the matrix - including the number of days - is an animated GIF. The `numbers` folders contain a series of GIFs for every number from 0-365. The `animations` folder is a series of spooky Halloween-themed animations to show at intervals between the countdown numbers. After all, it's an LED matrix, why waste it on just showing some numbers?
+This entire project is simply cycling a series of animated GIFs onto the matrix. Everything you see on the matrix - including the number of days - is an animated GIF. The `numbers` folders contain a series of GIFs for every number from 0-366, to account for leap years. The `animations` folder is a series of spooky Halloween-themed animations to show at intervals between the countdown numbers. After all, it's an LED matrix, why waste it on just showing some numbers?
 
 The animations in the `animations` folder were found from various sources around the Web and in some cases, optimized to display on the 32x32 Matrix. I did not create them, though they were all available from free, non-attribution and CC0-licensed sources.
 
-If you'd like to create your own or edit and optimize an existing GIF, you can use almost any graphics software (Photoshop, GIMP, etc) to create them, but remember that the matrix is actually very low resolution at only 32px x 32px, so you need to be careful with shadows, antialiasing, and too much color depth or variation. I found that [Piskel](https://www.piskelapp.com/) worked best for this, since it specializes in creating low-res "sprite style" GIF animations, which is exactly what this project needs.
+If you'd like to create your own or edit and optimize an existing GIF, you can use almost any graphics software (Photoshop, GIMP, etc) to create them, but remember that the matrix is very low resolution at only 32px x 32px, so you need to be careful with shadows, antialiasing, and too much color depth or variation. I found that [Piskel](https://www.piskelapp.com/) worked best for this, since it specializes in creating low-res "sprite style" GIF animations, which is exactly what this project needs.
 
 ## Running as a Service
 
@@ -71,7 +72,9 @@ You probably want this project to run as soon as it's plugged in, so you don't h
 
 See [this Gist](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f) for detailed instructions on how to do that.
 
-Create a file called `countdown.service` in `/lib/systemd/system/` and have it start the `main.py` script. 
+Move the included `countdown.service` file into `/lib/systemd/system/`. 
+
+Make sure you edit this file to use your system username and point to the correct location of the `main.py` script. 
 
 If you ever need to start/stop it for any reason, simply use `systemctl`:
 
@@ -82,7 +85,7 @@ If you ever need to start/stop it for any reason, simply use `systemctl`:
 
 _(There should be no need to go through these next steps unless you want to generate your own images using different fonts or colors than the included options.)_
 
-All of the numbers in the countdown, from 0 to 365, were generated using ImageMagick and a shell script (`generate.sh`, included here) to create them. 
+All of the numbers in the countdown, from 0 to 366, were generated using ImageMagick and a shell script (`generate.sh`, included here) to create them. 
 
 ImageMagick is a very robust, powerful and complicated software, so I'm not going to go into detail on how to use it, other than to explain what the specific calls to it are doing and some tips I learned along the way.
 
@@ -114,7 +117,7 @@ The final animation is generated on Line 28 of `generate.sh`:
 
 Again, you may have to play with these values to get the final result you want. 
 
-One helpful tip - if you just want to see one image, edit Line 2 and change:
+One helpful tip: if you just want to see one image, edit Line 2 and change:
 
 `for index in $(seq 0 366) `  
 to  
@@ -124,7 +127,7 @@ This will generate only one number animation and run a lot more quickly so you c
 
 Another option for previewing is to use only the first ImageMagick command to generate a preview at the Terminal:
 
-`magick -size 32x32 xc:black **-font Trade-Winds** -pointsize 15 -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" preview.gif`
+`magick -size 32x32 xc:black -font Trade-Winds -pointsize 15 -fill gradient:#00ff00 -gravity center -draw "text 0,0 '$index'" preview.gif`
 
 Once this is done, you can preview the image by just opening it on your desktop (which doesn't always give a good idea of how it will look on the matrix), or copy to the Pi filesystem and use the `display_gif` command (see above) to preview it on the Matrix. 
 
@@ -132,7 +135,7 @@ After you have completed creating the custom numbers, simply copy all of them ov
 
 ## OPTIONAL: Weatherproofing
 
-Since my matrix was going to spend 2 months outdoors in increasingly-bad fall weather, I wanted an option for weatherproofing it. After looking into a lot of different possibilities, here is what I came up with. As always, this isn't strictly necessary, especially if your matrix won't be outdoors, and you are welcome to use your own weatherproofing solutions depending on your needs. 
+Since my matrix was going to spend 2 months outdoors in increasingly-bad fall weather, I wanted an option for weatherproofing it. After looking into a lot of different possibilities, here is what I can up with. As always, this isn't strictly necessary, especially if your matrix won't be outdoors, and you are welcome to use your own weatherproofing solutions depending on your needs, but I am documenting what I did here for posterity. 
 
 Materials:
 
@@ -141,29 +144,9 @@ Materials:
 - 4-pin [Low Voltage Wire](https://a.co/d/cBcMhjm)
 - [Micro USB Pigtail](https://a.co/d/j2tZsGF) - Originally I did this with Screw Terminal connections, but they were too unreliable
 - [Barrel Connector Pigtails](https://a.co/d/0jiUitL) - One Female, One Male
-- [Solder Seal Wire Connectors](https://a.co/d/2ccD6YX)
 - a [SockitBox](https://a.co/d/1cQADuA) for the Pi and Matrix power sources
-- USB Type A Male [Screw Terminal](https://a.co/d/daM8h27) or [Pigtail](https://a.co/d/daM8h27) 
 
-Drill a hole in the bottom of the enclosure and install the cable gland and low voltage wire (Make sure you have a plan for how/where it's getting installed and drill the hole/run the wire accordingly! You don't want the wire lead getting in the way of installation. The clear lid of the box is facing forward so you can see the matrix, which means the "bottom" where I made the cord hole is actually the side.):
-
-![image](https://github.com/user-attachments/assets/b94bae4f-21f1-4f86-9a5d-ee72708ce3bf)
-
-Using the Solder Seal connectors, connect the Micro USB pigtail and the Male Barrel connector pigtail to the pins inside the wire. (you will have do the normal red/black on one and use white/yellow for the other. Doesn't really matter as long as your polarity is correct and you make sure the other end is connected the same way.) 
-![image](https://github.com/user-attachments/assets/a6ba113c-10fa-4eb8-9282-a2c9a8baa2a1)
-
-Do the same at the other end with the female Barrel Connector and the USB A Male Connector (again, watch your polarity! you will need to use white/yellow to connect red/black on one of them. Just keep track of what's going where. I used yellow to connect to red and white to connect to black on the matrix power cord)
-![image](https://github.com/user-attachments/assets/35ffbfb3-7dbe-4a4f-89b1-24303c23c3e8)
-
-The Pi and Matrix will stay inside the enclosure. The Matrix is held in place up against the screen using a bracked that I 3D printed (included in the repo in the `stl` folder):
-
-![image](https://github.com/user-attachments/assets/57f5782c-a978-4c1f-a636-c421ec7c3435)
-
-
-
-Store the power supplies for the Pi and the Matrix inside the SockitBox. 
-
-Run an outdoor extension cord into the SockitBox and run the 4-pin wire out of the SockitBox to connect the Matrix enclosure.
+Drill a hole in the bottom of the 
 
 ## OPTIONAL: Diffusing with Diffusion Acrylic 
 
@@ -171,12 +154,3 @@ You can use [Black Diffusion Acrylic](https://www.adafruit.com/product/4594) to 
 
 This isn't strictly necessary although it does help make the image a little cleaner-looking and less eye-hurty. I cut it down to size with a table saw and [this saw blade](https://a.co/d/cDQalF4).
 
-## TODO / Possible Future Enhancements
-
-While this project is complete and works as-is, here are a few features I am considering for the future:
-
-- Adding a clock module to remove the need for a WiFi connection to determine the date
-- Generating more number styles
-- "Plugins" or other styles for Christmas, other holidays, etc
-- Rotating between countdown number styles so there's more variety in the display for the same number
-- additional weatherproofing/outdoor display options

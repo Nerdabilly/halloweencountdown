@@ -11,7 +11,12 @@ from PIL import ImageDraw
 
 SECONDS_TO_DISPLAY_NUMBER = 8 # number of seconds to show a number, change this if you want the numbers up for longer or shorter time
 SECONDS_TO_DISPLAY_IMAGE = 3 # number of seconds to show the animations
-NUMBERS = "numbers_red"  # folder where your cowntdown number GIFs are. change this to numbers1, numbers2, numbers3 etc for your preferred style
+
+# NUMBERS: name of the folder where the countdown number GIFs are.
+# Included values are : `numbers_red`, `numbers_green`, `numbers_orange`, and `numbers_flame`.
+# See README.md for additional customization information
+
+NUMBERS = "numbers_red"  
 
 folder =  NUMBERS
 days_until_halloween = 0
